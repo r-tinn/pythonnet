@@ -318,6 +318,7 @@ namespace Python.Runtime
                     return true;
                 }
                 // shouldn't happen
+                Console.WriteLine("# shouldnt happen");
                 return false;
             }
 
@@ -338,6 +339,7 @@ namespace Python.Runtime
                 obType = obType.GetGenericArguments()[0];
             }
 
+            // Console.WriteLine("# obType " + obType);
             if (obType.IsArray)
             {
                 return ToArray(value, obType, out result, setError);
@@ -810,7 +812,7 @@ namespace Python.Runtime
             if (setError)
             {
                 string tpName = Runtime.PyObject_GetTypeName(value);
-                Exceptions.SetError(Exceptions.TypeError, $"'{tpName}' value cannot be converted to {obType}");
+                Exceptions.SetError(Exceptions.TypeError, $"'{tpName}' value cannot be converted to check {obType}");
             }
 
             return false;

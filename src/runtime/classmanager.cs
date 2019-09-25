@@ -80,6 +80,7 @@ namespace Python.Runtime
 
             if (type.ContainsGenericParameters)
             {
+                Console.WriteLine("generic type");
                 impl = new GenericType(type);
             }
 
@@ -90,6 +91,7 @@ namespace Python.Runtime
 
             else if (type.IsArray)
             {
+                Console.WriteLine("array type");
                 impl = new ArrayObject(type);
             }
 

@@ -104,6 +104,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# I");
             var self = (EventBinding)GetManagedObject(ob);
             string type = self.target == IntPtr.Zero ? "unbound" : "bound";
             string s = string.Format("<{0} event '{1}'>", type, self.e.name);

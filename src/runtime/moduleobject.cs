@@ -297,6 +297,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# C");
             var self = (ModuleObject)GetManagedObject(ob);
             return Runtime.PyString_FromString($"<module '{self.moduleName}'>");
         }

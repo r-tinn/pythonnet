@@ -186,6 +186,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# E");
             var self = (MethodObject)GetManagedObject(ob);
             return Runtime.PyString_FromString($"<method '{self.name}'>");
         }

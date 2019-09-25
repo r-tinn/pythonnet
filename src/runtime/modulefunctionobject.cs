@@ -32,6 +32,7 @@ namespace Python.Runtime
         /// </summary>
         public new static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# D");
             var self = (ModuleFunctionObject)GetManagedObject(ob);
             return Runtime.PyString_FromString($"<CLRModuleFunction '{self.name}'>");
         }

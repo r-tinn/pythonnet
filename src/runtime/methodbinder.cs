@@ -323,12 +323,15 @@ namespace Python.Runtime
 
                 if (!MatchesArgumentCount(pynargs, pi, kwargDict, out paramsArray, out defaultArgList))
                 {
+                    // Console.WriteLine("## !MATCHARGCOUNT(): " + mi);
                     continue;
                 }
                 var outs = 0;
+                // Console.WriteLine("## args: " + pi);
                 var margs = TryConvertArguments(pi, paramsArray, args, pynargs, kwargDict, defaultArgList,
                     needsResolution: _methods.Length > 1,
                     outs: out outs);
+                // Console.WriteLine("## margs: " + margs);
 
                 if (margs == null)
                 {
@@ -349,23 +352,28 @@ namespace Python.Runtime
                     // XXX maybe better to do this before all the other rigmarole.
                     if (co == null)
                     {
+                        Console.WriteLine("# return null, co == null");
                         return null;
                     }
                     target = co.inst;
                 }
 
+                // Console.WriteLine("# return Binding");
                 return new Binding(mi, target, margs, outs);
             }
             // We weren't able to find a matching method but at least one
             // is a generic method and info is null. That happens when a generic
             // method was not called using the [] syntax. Let's introspect the
             // type of the arguments and use it to construct the correct method.
+            //Console.WriteLine("# isGeneric, info: {0}, {1}", isGeneric, info);
             if (isGeneric && info == null && methodinfo != null)
             {
                 Type[] types = Runtime.PythonArgsToTypeArray(args, true);
                 MethodInfo mi = MatchParameters(methodinfo, types);
+                Console.WriteLine("# return Bind");
                 return Bind(inst, args, kw, mi, null);
             }
+            // Console.WriteLine("# return null, end," + _methods);
             return null;
         }
 
@@ -425,6 +433,7 @@ namespace Python.Runtime
                 bool isOut;
                 if (!TryConvertArgument(op, parameter.ParameterType, needsResolution, out margs[paramIndex], out isOut))
                 {
+                    // Console.WriteLine("# margs return null");
                     return null;
                 }
 
@@ -442,6 +451,7 @@ namespace Python.Runtime
                 }
             }
 
+            // Console.WriteLine("# margs: " + margs.Length);
             return margs;
         }
 
@@ -453,11 +463,13 @@ namespace Python.Runtime
             var clrtype = TryComputeClrArgumentType(parameterType, op, needsResolution: needsResolution);
             if (clrtype == null)
             {
+                // Console.WriteLine("# clrtype null");
                 return false;
             }
 
             if (!Converter.ToManaged(op, clrtype, out arg, false))
             {
+                // Console.WriteLine("# !Converter.ToManaged");
                 Exceptions.Clear();
                 return false;
             }
@@ -485,23 +497,32 @@ namespace Python.Runtime
                 Runtime.XDecref(pyoptype);
             }
 
+            // Console.WriteLine("## clrtype/paramtype: " + clrtype + "/" + parameterType);
             if (clrtype != null)
             {
                 var typematch = false;
                 if ((parameterType != typeof(object)) && (parameterType != clrtype))
                 {
+                    // Console.WriteLine("## (parameterType != typeof(object)) && (parameterType != clrtype)");
                     IntPtr pytype = Converter.GetPythonTypeByAlias(parameterType);
                     pyoptype = Runtime.PyObject_Type(argument);
                     Exceptions.Clear();
                     if (pyoptype != IntPtr.Zero)
                     {
-                        if (pytype != pyoptype)
+                        // Console.WriteLine("### pytype/pyoptype: " + parameterType + "/" + Converter.GetTypeByAlias(pyoptype));
+                        if(parameterType == typeof(Double) && Converter.GetTypeByAlias(pyoptype) == typeof(Int32))
+                        {
+                            typematch = true;
+                            clrtype = parameterType;
+                        }
+                        else if (pytype != pyoptype)
                         {
                             typematch = false;
                         }
                         else
                         {
                             typematch = true;
+                            Console.WriteLine("## clrtype typematch 1" + clrtype);
                             clrtype = parameterType;
                         }
                     }
@@ -513,23 +534,27 @@ namespace Python.Runtime
                         if (argtypecode == paramtypecode)
                         {
                             typematch = true;
+                            Console.WriteLine("## clrtype typematch 2" + clrtype);
                             clrtype = parameterType;
                         }
                     }
                     Runtime.XDecref(pyoptype);
                     if (!typematch)
                     {
+                        // Console.WriteLine("## NO TYPEMATCH");
                         return null;
                     }
                 }
                 else
                 {
                     typematch = true;
+                    // Console.WriteLine("## clrtype typematch 3: " + clrtype);
                     clrtype = parameterType;
                 }
             }
             else
             {
+                // Console.WriteLine("## clrtype paramtype: " + clrtype);
                 clrtype = parameterType;
             }
 
@@ -602,6 +627,7 @@ namespace Python.Runtime
         internal virtual IntPtr Invoke(IntPtr inst, IntPtr args, IntPtr kw, MethodBase info, MethodInfo[] methodinfo)
         {
             Binding binding = Bind(inst, args, kw, info, methodinfo);
+            // Console.WriteLine("# binding: " + binding);
             object result;
             IntPtr ts = IntPtr.Zero;
 

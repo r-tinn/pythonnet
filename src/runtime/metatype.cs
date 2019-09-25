@@ -221,6 +221,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr mp_subscript(IntPtr tp, IntPtr idx)
         {
+            Console.WriteLine("# __get__item 3");
             var cb = GetManagedObject(tp) as ClassBase;
             if (cb != null)
             {

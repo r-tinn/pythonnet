@@ -42,6 +42,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr mp_subscript(IntPtr ob, IntPtr idx)
         {
+            Console.WriteLine("# __get__item !");
             var obj = (CLRObject)GetManagedObject(ob);
             var items = obj.inst as Array;
             Type itemType = obj.inst.GetType().GetElementType();

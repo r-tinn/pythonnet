@@ -157,6 +157,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# A");
             var self = (PropertyObject)GetManagedObject(ob);
             return Runtime.PyString_FromString($"<property '{self.info.Name}'>");
         }

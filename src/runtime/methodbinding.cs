@@ -41,6 +41,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr mp_subscript(IntPtr tp, IntPtr idx)
         {
+            Console.WriteLine("# __get__item 4");
             var self = (MethodBinding)GetManagedObject(tp);
 
             Type[] types = Runtime.PythonArgsToTypeArray(idx);
@@ -225,6 +226,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# F");
             var self = (MethodBinding)GetManagedObject(ob);
             string type = self.target == IntPtr.Zero ? "unbound" : "bound";
             string name = self.m.name;

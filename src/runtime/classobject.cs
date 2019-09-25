@@ -159,6 +159,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr mp_subscript(IntPtr ob, IntPtr idx)
         {
+            Console.WriteLine("# __get__item 1");
             //ManagedType self = GetManagedObject(ob);
             IntPtr tp = Runtime.PyObject_TYPE(ob);
             var cls = (ClassBase)GetManagedObject(tp);

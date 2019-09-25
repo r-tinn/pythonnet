@@ -187,6 +187,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# H");
             var self = (EventObject)GetManagedObject(ob);
             return Runtime.PyString_FromString($"<event '{self.name}'>");
         }

@@ -24,6 +24,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr mp_subscript(IntPtr tp, IntPtr idx)
         {
+            Console.WriteLine("# __get__item 5");
             var self = (OverloadMapper)GetManagedObject(tp);
 
             // Note: if the type provides a non-generic method with N args
@@ -52,6 +53,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr op)
         {
+            Console.WriteLine("# B");
             var self = (OverloadMapper)GetManagedObject(op);
             IntPtr doc = self.m.GetDocString();
             Runtime.XIncref(doc);

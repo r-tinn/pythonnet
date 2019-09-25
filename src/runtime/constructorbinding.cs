@@ -89,6 +89,7 @@ namespace Python.Runtime
         /// </remarks>
         public static IntPtr mp_subscript(IntPtr op, IntPtr key)
         {
+            Console.WriteLine("# __get__item 2");
             var self = (ConstructorBinding)GetManagedObject(op);
 
             Type[] types = Runtime.PythonArgsToTypeArray(key);
@@ -113,6 +114,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# K");
             var self = (ConstructorBinding)GetManagedObject(ob);
             if (self.repr != IntPtr.Zero)
             {
@@ -208,6 +210,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_repr(IntPtr ob)
         {
+            Console.WriteLine("# J");
             var self = (BoundContructor)GetManagedObject(ob);
             if (self.repr != IntPtr.Zero)
             {
