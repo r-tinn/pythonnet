@@ -26,6 +26,7 @@ namespace Python.Runtime
         /// </summary>
         internal bool AddEventHandler(IntPtr target, IntPtr handler)
         {
+            Console.WriteLine("Add event handler");
             object obj = null;
             if (target != IntPtr.Zero)
             {
@@ -71,6 +72,7 @@ namespace Python.Runtime
         /// </summary>
         internal bool RemoveEventHandler(IntPtr target, IntPtr handler)
         {
+            Console.WriteLine("Remove event handler");
             object obj = null;
             if (target != IntPtr.Zero)
             {

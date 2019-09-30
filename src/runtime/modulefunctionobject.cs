@@ -23,6 +23,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_call(IntPtr ob, IntPtr args, IntPtr kw)
         {
+            Console.WriteLine("module function object tp call");
             var self = (ModuleFunctionObject)GetManagedObject(ob);
             return self.Invoke(ob, args, kw);
         }

@@ -719,6 +719,8 @@ namespace Python.Runtime
         /// </remarks>
         public PyObject InvokeMethod(string name, params PyObject[] args)
         {
+            Console.WriteLine("pyobject invoke method");
+            Console.WriteLine("Invoke method");
             PyObject method = GetAttr(name);
             PyObject result = method.Invoke(args);
             method.Dispose();
@@ -1088,6 +1090,7 @@ namespace Python.Runtime
 
         public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
         {
+            Console.WriteLine("try invoke");
             if (this.IsCallable())
             {
                 PyTuple pyargs = null;

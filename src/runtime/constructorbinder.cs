@@ -49,6 +49,7 @@ namespace Python.Runtime
         /// </remarks>
         internal object InvokeRaw(IntPtr inst, IntPtr args, IntPtr kw, MethodBase info)
         {
+            Console.WriteLine("Invoke raw");
             object result;
 
             if (_containingType.IsValueType && !_containingType.IsPrimitive &&

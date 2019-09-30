@@ -161,6 +161,7 @@ namespace Python.Runtime
 
         private void DisposeAll()
         {
+            Console.WriteLine("Dispose all");
             CollectOnce?.Invoke(this, new CollectArgs()
             {
                 ObjectCount = _objQueue.Count

@@ -280,6 +280,7 @@ namespace Python.Runtime
 
         internal Binding Bind(IntPtr inst, IntPtr args, IntPtr kw, MethodBase info, MethodInfo[] methodinfo)
         {
+            Console.WriteLine("methodbinder bind");
             // loop to find match, return invoker w/ or /wo error
             MethodBase[] _methods = null;
 
@@ -397,6 +398,7 @@ namespace Python.Runtime
             bool needsResolution,
             out int outs)
         {
+            Console.WriteLine("# try convert args");
             outs = 0;
             var margs = new object[pi.Length];
             int arrayStart = paramsArray ? pi.Length - 1 : -1;
@@ -458,21 +460,25 @@ namespace Python.Runtime
         static bool TryConvertArgument(IntPtr op, Type parameterType, bool needsResolution,
                                        out object arg, out bool isOut)
         {
+            Console.WriteLine("## try convert arg");
             arg = null;
             isOut = false;
             var clrtype = TryComputeClrArgumentType(parameterType, op, needsResolution: needsResolution);
+            Console.WriteLine("Clrtype: " + clrtype);
+            Console.WriteLine("Op: " + op);
             if (clrtype == null)
             {
-                // Console.WriteLine("# clrtype null");
+                Console.WriteLine("!! clrtype null");
                 return false;
             }
 
             if (!Converter.ToManaged(op, clrtype, out arg, false))
             {
-                // Console.WriteLine("# !Converter.ToManaged");
+                Console.WriteLine("!! !Converter.ToManaged");
                 Exceptions.Clear();
                 return false;
             }
+            Console.WriteLine("! Arg: " + arg.ToString() + " " + (arg is int) + " " + (arg is double));
 
             isOut = clrtype.IsByRef;
             return true;
@@ -483,6 +489,7 @@ namespace Python.Runtime
             // this logic below handles cases when multiple overloading methods
             // are ambiguous, hence comparison between Python and CLR types
             // is necessary
+            Console.WriteLine("### try convert arg clr type");
             Type clrtype = null;
             IntPtr pyoptype;
             if (needsResolution)
@@ -509,8 +516,8 @@ namespace Python.Runtime
                     Exceptions.Clear();
                     if (pyoptype != IntPtr.Zero)
                     {
-                        // Console.WriteLine("### pytype/pyoptype: " + parameterType + "/" + Converter.GetTypeByAlias(pyoptype));
-                        if(parameterType == typeof(Double) && Converter.GetTypeByAlias(pyoptype) == typeof(Int32))
+                        Console.WriteLine("!!! pytype/pyoptype: " + parameterType + "/" + Converter.GetTypeByAlias(pyoptype));
+                        if (IsNumericType(parameterType) && IsNumericType(clrtype))
                         {
                             typematch = true;
                             clrtype = parameterType;
@@ -626,6 +633,7 @@ namespace Python.Runtime
 
         internal virtual IntPtr Invoke(IntPtr inst, IntPtr args, IntPtr kw, MethodBase info, MethodInfo[] methodinfo)
         {
+            Console.WriteLine("method binder invoke");
             Binding binding = Bind(inst, args, kw, info, methodinfo);
             // Console.WriteLine("# binding: " + binding);
             object result;
@@ -740,6 +748,39 @@ namespace Python.Runtime
             }
 
             return Converter.ToPython(result, mi.ReturnType);
+        }
+
+        private static bool IsNumericType(Type type)
+        {
+            TypeCode tc = Type.GetTypeCode(type);
+            switch (tc)
+            {
+                case TypeCode.Byte:
+                    return true;
+                case TypeCode.Decimal:
+                    return true;
+                case TypeCode.Double:
+                    return true;
+                case TypeCode.Int16:
+                    return true;
+                case TypeCode.Int32:
+                    return true;
+                case TypeCode.Int64:
+                    return true;
+                case TypeCode.Single:
+                    return true;
+                case TypeCode.SByte:
+                    return true;
+                case TypeCode.UInt16:
+                    return true;
+                case TypeCode.UInt32:
+                    return true;
+                case TypeCode.UInt64:
+                    return true;
+                default:
+                    return false;
+
+            }
         }
     }
 

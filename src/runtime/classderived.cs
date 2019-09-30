@@ -632,6 +632,7 @@ namespace Python.Runtime
         /// </summary>
         public static T InvokeMethod<T>(IPythonDerivedType obj, string methodName, string origMethodName, object[] args)
         {
+            Console.WriteLine("Invoke method");
             FieldInfo fi = obj.GetType().GetField("__pyobj__");
             var self = (CLRObject)fi.GetValue(obj);
 
@@ -695,6 +696,7 @@ namespace Python.Runtime
         public static void InvokeMethodVoid(IPythonDerivedType obj, string methodName, string origMethodName,
             object[] args)
         {
+            Console.WriteLine("Invoke method void");
             FieldInfo fi = obj.GetType().GetField("__pyobj__");
             var self = (CLRObject)fi.GetValue(obj);
             if (null != self)

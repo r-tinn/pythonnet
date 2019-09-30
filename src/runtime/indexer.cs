@@ -45,12 +45,14 @@ namespace Python.Runtime
 
         internal IntPtr GetItem(IntPtr inst, IntPtr args)
         {
+            Console.WriteLine("Get item");
             return GetterBinder.Invoke(inst, args, IntPtr.Zero);
         }
 
 
         internal void SetItem(IntPtr inst, IntPtr args)
         {
+            Console.WriteLine("Set item");
             SetterBinder.Invoke(inst, args, IntPtr.Zero);
         }
 

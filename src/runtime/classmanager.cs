@@ -67,6 +67,7 @@ namespace Python.Runtime
         /// </summary>
         private static ClassBase CreateClass(Type type)
         {
+            //Console.WriteLine("Create class");
             // Next, select the appropriate managed implementation class.
             // Different kinds of types, such as array types or interface
             // types, want to vary certain implementation details to make
@@ -80,7 +81,7 @@ namespace Python.Runtime
 
             if (type.ContainsGenericParameters)
             {
-                Console.WriteLine("generic type");
+                // Console.WriteLine("generic type");
                 impl = new GenericType(type);
             }
 

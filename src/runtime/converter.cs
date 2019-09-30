@@ -352,6 +352,7 @@ namespace Python.Runtime
 
             // Conversion to 'Object' is done based on some reasonable default
             // conversions (Python string -> managed string, Python int -> Int32 etc.).
+            // TODO
             if (obType == objectType)
             {
                 if (Runtime.IsStringType(value))
@@ -793,7 +794,9 @@ namespace Python.Runtime
                     result = (float)dd;
                     return true;
 
+                // TODO
                 case TypeCode.Double:
+                    Console.WriteLine("double");
                     op = Runtime.PyNumber_Float(value);
                     if (op == IntPtr.Zero)
                     {

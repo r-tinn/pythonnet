@@ -289,6 +289,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_call(IntPtr ob, IntPtr args, IntPtr kw)
         {
+            Console.WriteLine("tp call");
             //ManagedType self = GetManagedObject(ob);
             IntPtr tp = Runtime.PyObject_TYPE(ob);
             var cb = (ClassBase)GetManagedObject(tp);

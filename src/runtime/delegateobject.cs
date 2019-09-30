@@ -73,6 +73,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_call(IntPtr ob, IntPtr args, IntPtr kw)
         {
+            Console.WriteLine("delegate object tp_call");
             // TODO: add fast type check!
             IntPtr pytype = Runtime.PyObject_TYPE(ob);
             var self = (DelegateObject)GetManagedObject(pytype);
