@@ -97,7 +97,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_call(IntPtr ob, IntPtr args, IntPtr kw)
         {
-            Console.WriteLine("method binding tp_call");
+            //Console.WriteLine("method binding tp_call");
             var self = (MethodBinding)GetManagedObject(ob);
 
             // This works around a situation where the wrong generic method is picked,

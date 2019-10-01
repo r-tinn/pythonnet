@@ -796,7 +796,7 @@ namespace Python.Runtime
 
                 // TODO
                 case TypeCode.Double:
-                    Console.WriteLine("double");
+                    //Console.WriteLine("double");
                     op = Runtime.PyNumber_Float(value);
                     if (op == IntPtr.Zero)
                     {

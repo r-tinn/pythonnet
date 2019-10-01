@@ -23,7 +23,7 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr tp_call(IntPtr ob, IntPtr args, IntPtr kw)
         {
-            Console.WriteLine("module function object tp call");
+            //Console.WriteLine("module function object tp call");
             var self = (ModuleFunctionObject)GetManagedObject(ob);
             return self.Invoke(ob, args, kw);
         }
@@ -33,7 +33,7 @@ namespace Python.Runtime
         /// </summary>
         public new static IntPtr tp_repr(IntPtr ob)
         {
-            Console.WriteLine("# D");
+            //Console.WriteLine("# D");
             var self = (ModuleFunctionObject)GetManagedObject(ob);
             return Runtime.PyString_FromString($"<CLRModuleFunction '{self.name}'>");
         }

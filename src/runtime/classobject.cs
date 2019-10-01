@@ -159,10 +159,19 @@ namespace Python.Runtime
         /// </summary>
         public static IntPtr mp_subscript(IntPtr ob, IntPtr idx)
         {
-            Console.WriteLine("# __get__item 1");
+            //Console.WriteLine("# __get__item 1");
             //ManagedType self = GetManagedObject(ob);
             IntPtr tp = Runtime.PyObject_TYPE(ob);
             var cls = (ClassBase)GetManagedObject(tp);
+
+            var t = cls.type;
+            Console.WriteLine("cls type: " + t.ToString());
+            var a = t.GetMethod("IsDefinedInContext");
+            var e = a.GetParameters().GetEnumerator();
+            e.MoveNext();
+            Console.WriteLine("Method: " + a + " " + e.Current.GetType(). + " " + (e.Current.GetType() is object).ToString());
+            Console.WriteLine("Method: " + t.GetMethod("op_Addition", new Type[] { typeof(object), typeof(object)}));
+
 
             if (cls.indexer == null || !cls.indexer.CanGet)
             {
@@ -170,6 +179,50 @@ namespace Python.Runtime
                 return IntPtr.Zero;
             }
 
+            // Arg may be a tuple in the case of an indexer with multiple
+            // parameters. If so, use it directly, else make a new tuple
+            // with the index arg (method binders expect arg tuples).
+            IntPtr args = idx;
+            var free = false;
+
+            if (!Runtime.PyTuple_Check(idx))
+            {
+                args = Runtime.PyTuple_New(1);
+                Runtime.XIncref(idx);
+                Runtime.PyTuple_SetItem(args, 0, idx);
+                free = true;
+            }
+
+            IntPtr value;
+
+            try
+            {
+                value = cls.indexer.GetItem(ob, args);
+            }
+            finally
+            {
+                if (free)
+                {
+                    Runtime.XDecref(args);
+                }
+            }
+            return value;
+        }
+
+        public static IntPtr nb_add(IntPtr ob, IntPtr idx)
+        {
+            //Console.WriteLine("# __get__item 1");
+            //ManagedType self = GetManagedObject(ob);
+            IntPtr tp = Runtime.PyObject_TYPE(ob);
+            var cls = (ClassBase)GetManagedObject(tp);
+
+            if (cls.indexer == null || !cls.indexer.CanGet)
+            {
+                Exceptions.SetError(Exceptions.TypeError, "unindexable nb_add object");
+                return IntPtr.Zero;
+            }
+
+            Console.WriteLine("nb_add");
             // Arg may be a tuple in the case of an indexer with multiple
             // parameters. If so, use it directly, else make a new tuple
             // with the index arg (method binders expect arg tuples).
