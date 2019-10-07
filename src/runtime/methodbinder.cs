@@ -750,9 +750,10 @@ namespace Python.Runtime
             return Converter.ToPython(result, mi.ReturnType);
         }
 
-        private static bool IsNumericType(Type type)
+        static bool IsNumericType(Type type, out TypeCode typeCode)
         {
             TypeCode tc = Type.GetTypeCode(type);
+            typeCode = TypeCode.Boolean;
             switch (tc)
             {
                 case TypeCode.Byte:
@@ -767,9 +768,9 @@ namespace Python.Runtime
                     return true;
                 case TypeCode.Int64:
                     return true;
-                case TypeCode.Single:
-                    return true;
                 case TypeCode.SByte:
+                    return true;
+                case TypeCode.Single:
                     return true;
                 case TypeCode.UInt16:
                     return true;
@@ -779,7 +780,6 @@ namespace Python.Runtime
                     return true;
                 default:
                     return false;
-
             }
         }
     }

@@ -169,7 +169,7 @@ namespace Python.Runtime
             var a = t.GetMethod("IsDefinedInContext");
             var e = a.GetParameters().GetEnumerator();
             e.MoveNext();
-            Console.WriteLine("Method: " + a + " " + e.Current.GetType(). + " " + (e.Current.GetType() is object).ToString());
+            Console.WriteLine("Method: " + a + " " + e.Current.GetType() + " " + (e.Current.GetType() is object).ToString());
             Console.WriteLine("Method: " + t.GetMethod("op_Addition", new Type[] { typeof(object), typeof(object)}));
 
 
