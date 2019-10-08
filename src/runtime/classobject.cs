@@ -163,6 +163,14 @@ namespace Python.Runtime
             IntPtr tp = Runtime.PyObject_TYPE(ob);
             var cls = (ClassBase)GetManagedObject(tp);
 
+            // Over write the __getitem__ magic method for Variable class
+            if (cls.type.GetMethod("IsDefinedInContext") != null)
+            {
+                Console.WriteLine("MAGIC");
+            }
+            // Can't get reflected method op_Addition because type arguments are not defined in dll
+            // TODO: Console.WriteLine("Method: " + t.GetMethod("op_Addition", new Type[] { typeof(object), typeof(object) }));
+
             if (cls.indexer == null || !cls.indexer.CanGet)
             {
                 Exceptions.SetError(Exceptions.TypeError, "unindexable object");
