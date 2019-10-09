@@ -495,7 +495,13 @@ namespace Python.Runtime
                     Exceptions.Clear();
                     if (pyoptype != IntPtr.Zero)
                     {
-                        if (pytype != pyoptype)
+                        // Arguments that are a different numeric data type to the parameter can be converted
+                        if (IsConvertibleNumericType(parameterType) && IsConvertibleNumericType(clrtype))
+                        {
+                            typematch = true;
+                            clrtype = parameterType;
+                        }
+                        else if (pytype != pyoptype)
                         {
                             typematch = false;
                         }
@@ -587,6 +593,34 @@ namespace Python.Runtime
             }
 
             return match;
+        }
+
+        static bool IsConvertibleNumericType(Type type)
+        {
+            TypeCode typeCode = Type.GetTypeCode(type);
+            switch (typeCode)
+            {
+                case TypeCode.Decimal:
+                    return true;
+                case TypeCode.Double:
+                    return true;
+                case TypeCode.Int16:
+                    return true;
+                case TypeCode.Int32:
+                    return true;
+                case TypeCode.Int64:
+                    return true;
+                case TypeCode.Single:
+                    return true;
+                case TypeCode.UInt16:
+                    return true;
+                case TypeCode.UInt32:
+                    return true;
+                case TypeCode.UInt64:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         internal virtual IntPtr Invoke(IntPtr inst, IntPtr args, IntPtr kw)
